@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventory Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <section id="loginView" class="login-view">
+        <div class="login-panel">
+            <div class="brand-mark">ID</div>
+            <p class="eyebrow">Inventory operations</p>
+            <h1>Welcome back</h1>
+            <p class="muted">Sign in to manage products, orders, and billing.</p>
+            <form id="loginForm" class="login-form">
+                <label for="loginUsername">Username or email</label>
+                <input type="text" id="loginUsername" autocomplete="username" placeholder="admin">
+                <label for="loginPassword">Password</label>
+                <div class="password-field">
+                    <input type="password" id="loginPassword" autocomplete="current-password" placeholder="Enter password">
+                    <button type="button" class="icon-button" id="togglePassword" aria-label="Show password">Show</button>
+                </div>
+                <p id="loginError" class="error-message" role="alert"></p>
+                <button type="submit" class="primary-button login-button">Login</button>
+            </form>
+            <p class="demo-note">Demo access: <strong>admin</strong> / <strong>admin123</strong></p>
+        </div>
+    </section>
+
+    <div id="appView" class="app-shell hidden">
+        <aside class="sidebar">
+            <div class="sidebar-brand"><span class="brand-mark small">ID</span><div><strong>Inventory</strong><span>Dashboard</span></div></div>
+            <nav aria-label="Main navigation">
+                <ul>
+                    <li data-section="dashboard" class="active">Dashboard</li>
+                    <li data-section="products">Products</li>
+                    <li data-section="categories">Categories</li>
+                    <li data-section="orders">Orders</li>
+                    <li data-section="reports">Reports</li>
+                    <li data-section="settings">Settings</li>
+                </ul>
+            </nav>
+            <button type="button" id="sidebarLogout" class="logout-button">Log out</button>
+        </aside>
+
+        <main class="main">
+            <header class="header">
+                <div><p class="eyebrow">Workspace</p><h1 id="pageTitle">Inventory Dashboard</h1></div>
+                <div class="header-actions">
+                    <div class="search-wrap" id="searchWrap">
+                        <input type="search" id="search" placeholder="Search products..." autocomplete="off" aria-label="Search">
+                        <div id="searchSuggestions" class="suggestions" role="listbox"></div>
+                    </div>
+                    <button type="button" id="headerLogout" class="secondary-button">Log out</button>
+                </div>
+            </header>
+
+            <section id="dashboardSection" class="section">
+                <div class="section-heading"><div><p class="eyebrow">Overview</p><h2>Good to see you</h2></div><span class="date-chip" id="todayLabel"></span></div>
+                <div class="cards dashboard-cards">
+                    <div class="card accent-blue"><span>Total Products</span><strong id="totalProducts">0</strong></div>
+                    <div class="card accent-violet"><span>Total Categories</span><strong id="totalCategories">0</strong></div>
+                    <div class="card accent-green"><span>Total Orders</span><strong id="totalOrders">0</strong></div>
+                    <div class="card accent-orange"><span>Low Stock</span><strong id="lowStock">0</strong></div>
+                    <div class="card accent-rose"><span>Total Revenue</span><strong id="totalRevenue">₹0.00</strong></div>
+                </div>
+                <div class="welcome-panel"><div><p class="eyebrow">Inventory pulse</p><h2>Keep every item moving.</h2><p class="muted">Use the sections on the left to manage your catalog, fulfill orders, and review billing performance.</p></div><div class="pulse-stat"><strong id="dashboardItemsSold">0</strong><span>items sold</span></div></div>
+            </section>
+
+            <section id="productsSection" class="section">
+                <div class="form"><div class="section-heading"><div><p class="eyebrow">Catalog</p><h2 id="productFormTitle">Add Product</h2></div></div>
+                    <div class="form-grid"><div><label for="productName">Product Name</label><input type="text" id="productName" placeholder="e.g. Pen"></div><div><label for="productCategory">Category</label><select id="productCategory"></select></div><div><label for="productPrice">Price (₹)</label><input type="number" id="productPrice" placeholder="5.00" min="0.01" step="0.01"></div><div><label for="productStock">Stock / Quantity</label><input type="number" id="productStock" placeholder="10" min="0" step="1"></div></div>
+                    <p id="productError" class="error-message" role="alert"></p><div class="form-row"><button type="button" id="productSaveButton" class="primary-button">Add Product</button><button type="button" id="productCancelButton" class="secondary-button hidden">Cancel</button></div>
+                </div>
+                <div class="table-wrap"><table><thead><tr><th>Name</th><th>Category</th><th>Price</th><th>Stock</th><th>Action</th></tr></thead><tbody id="productTableBody"></tbody></table></div>
+            </section>
+
+            <section id="categoriesSection" class="section">
+                <div class="form"><p class="eyebrow">Catalog structure</p><h2 id="categoryFormTitle">Add Category</h2><label for="categoryName">Category Name</label><input type="text" id="categoryName" placeholder="e.g. Stationery"><p id="categoryError" class="error-message" role="alert"></p><div class="form-row"><button type="button" id="categorySaveButton" class="primary-button">Add Category</button><button type="button" id="categoryCancelButton" class="secondary-button hidden">Cancel</button></div></div>
+                <div class="table-wrap"><table><thead><tr><th>Category</th><th>Action</th></tr></thead><tbody id="categoryTableBody"></tbody></table></div>
+            </section>
+
+            <section id="ordersSection" class="section">
+                <div class="form"><p class="eyebrow">Fulfillment</p><h2 id="orderFormTitle">Add Order</h2><div class="form-grid"><div><label for="orderProduct">Product Name</label><select id="orderProduct"></select></div><div><label for="orderPrice">Price per item</label><input type="text" id="orderPrice" readonly placeholder="Select a product"></div><div><label for="orderAvailableStock">Available Stock</label><input type="text" id="orderAvailableStock" readonly placeholder="Select a product"></div><div><label for="orderQuantity">Quantity</label><input type="number" id="orderQuantity" placeholder="1" min="1" step="1"></div><div><label for="orderTotal">Total Price</label><input type="text" id="orderTotal" readonly value="₹0.00"></div><div><label for="orderPayment">Payment Method</label><select id="orderPayment"><option value="" disabled selected>Select Payment Method</option><option value="UPI">UPI</option><option value="PhonePe">PhonePe</option><option value="Google Pay">Google Pay</option><option value="Cash">Cash</option><option value="Credit Card">Credit Card</option><option value="Debit Card">Debit Card</option></select></div><div><label for="orderStatus">Order Status</label><select id="orderStatus"><option value="Pending">Pending</option><option value="Processing">Processing</option><option value="Completed">Completed</option><option value="Cancelled">Cancelled</option></select></div></div><p id="orderError" class="error-message" role="alert"></p><div class="form-row"><button type="button" id="orderSaveButton" class="primary-button">Add Order</button><button type="button" id="orderCancelButton" class="secondary-button hidden">Cancel</button></div></div>
+                <div class="table-wrap"><table><thead><tr><th>Order ID</th><th>Product</th><th>Price</th><th>Qty</th><th>Total</th><th>Payment</th><th>Status</th><th>Date</th><th>Action</th></tr></thead><tbody id="orderTableBody"></tbody></table></div>
+            </section>
+
+            <section id="reportsSection" class="section"><div class="section-heading"><div><p class="eyebrow">Performance</p><h2>Reports & billing</h2></div></div><div class="cards report-cards"><div class="card"><span>Total Products</span><strong id="reportTotal">0</strong></div><div class="card"><span>Total Categories</span><strong id="reportCategories">0</strong></div><div class="card"><span>Total Orders</span><strong id="reportOrders">0</strong></div><div class="card"><span>Low Stock Products</span><strong id="reportLow">0</strong></div><div class="card"><span>Total Items Sold</span><strong id="reportItemsSold">0</strong></div><div class="card"><span>Total Revenue</span><strong id="reportRevenue">₹0.00</strong></div></div><div class="billing-panel"><div class="section-heading"><div><p class="eyebrow">Payment register</p><h2>Payment Summary</h2></div><strong id="billingSubtotal">Subtotal: ₹0.00</strong></div><div id="paymentSummary" class="payment-summary"></div><div class="billing-stats"><span>Total Orders <strong id="billingOrders">0</strong></span><span>Total Items Sold <strong id="billingItems">0</strong></span><span>Pending <strong id="billingPending">0</strong></span><span>Processing <strong id="billingProcessing">0</strong></span><span>Completed <strong id="billingCompleted">0</strong></span><span>Cancelled <strong id="billingCancelled">0</strong></span></div><div class="table-wrap"><table><thead><tr><th>Order ID</th><th>Product</th><th>Price</th><th>Qty</th><th>Total</th><th>Payment</th><th>Status</th><th>Date</th></tr></thead><tbody id="billingTableBody"></tbody></table></div></div></section>
+
+            <section id="settingsSection" class="section"><div class="form settings-panel"><p class="eyebrow">Preferences</p><h2>Settings</h2><div class="setting-row"><div><strong>Dark Mode</strong><p class="muted">Adjust the dashboard appearance.</p></div><button type="button" id="themeButton" class="secondary-button">Enable Dark Mode</button></div><div class="setting-row"><div><strong>Session</strong><p class="muted">Signed in as admin.</p></div><button type="button" id="settingsLogout" class="secondary-button">Log out</button></div></div></section>
++        </main>
++    </div>
++    <script src="script.js"></script>
++</body>
++</html>
